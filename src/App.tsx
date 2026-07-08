@@ -4,6 +4,7 @@ import zhCN from 'antd/locale/zh_CN';
 import AppLayout from './components/AppLayout';
 import RequireAuth from './components/RequireAuth';
 import LoginPage from './pages/Login';
+import DashboardPage from './pages/Dashboard';
 import QuestionsPage from './pages/Questions';
 import UsersPage from './pages/Users';
 
@@ -22,9 +23,10 @@ export default function App() {
                 </RequireAuth>
               }
             >
-              <Route index element={<Navigate to="/questions" replace />} />
+              <Route index element={<Navigate to="/dashboard" replace />} />
+              <Route path="dashboard"  element={<DashboardPage />} />
               <Route path="questions" element={<QuestionsPage />} />
-              <Route path="users" element={<UsersPage />} />
+              <Route path="users"     element={<UsersPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

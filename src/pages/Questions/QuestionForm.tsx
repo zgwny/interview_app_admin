@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, Select, Button, Space, message } from 'antd';
+import { Form, Input, Select, Button, Space, Tabs, message } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { CATEGORIES, DIFFICULTIES, type Question } from '../../api/questions';
 import { createQuestion, updateQuestion } from '../../api/questions';
+import MarkdownView from '../../components/MarkdownView';
 
 interface Props {
   initial?: Question;
@@ -12,6 +13,55 @@ interface Props {
 
 const catOptions = CATEGORIES.map((c) => ({ label: c, value: c }));
 const diffOptions = DIFFICULTIES.map((d) => ({ label: d, value: d }));
+
+/** 带编辑 / 预览 tab 的 Markdown 输入框 */
+function MarkdownEditor({
+  value, onChange, rows = 6, placeholder,
+}: {
+  value?: string;
+  onChange?: (v: string) => void;
+  rows?: number;
+  placeholder?: string;
+}) {
+  return (
+    <Tabs
+      size="small"
+      style={{ marginBottom: 0 }}
+      items={[
+        {
+          key: 'edit',
+          label: '编辑',
+          children: (
+            <Input.TextArea
+              value={value}
+              onChange={(e) => onChange?.(e.target.value)}
+              rows={rows}
+              placeholder={placeholder}
+              style={{ fontFamily: 'monospace', fontSize: 13 }}
+            />
+          ),
+        },
+        {
+          key: 'preview',
+          label: '预览',
+          children: (
+            <div style={{
+              minHeight: rows * 22,
+              border: '1px solid #d9d9d9',
+              borderRadius: 6,
+              padding: '8px 12px',
+              background: '#fafafa',
+            }}>
+              {value
+                ? <MarkdownView>{value}</MarkdownView>
+                : <span style={{ color: '#bbb' }}>（无内容）</span>}
+            </div>
+          ),
+        },
+      ]}
+    />
+  );
+}
 
 export default function QuestionForm({ initial, onSuccess, onCancel }: Props) {
   const [form] = Form.useForm();
@@ -50,12 +100,12 @@ export default function QuestionForm({ initial, onSuccess, onCancel }: Props) {
         <Input placeholder="请输入题目标题" />
       </Form.Item>
 
-      <Form.Item name="content" label="题目内容" rules={[{ required: true }]}>
-        <Input.TextArea rows={4} placeholder="题目描述（支持 Markdown）" />
+      <Form.Item name="content" label="题目内容（Markdown）" rules={[{ required: true }]}>
+        <MarkdownEditor rows={4} placeholder="题目描述，支持 Markdown" />
       </Form.Item>
 
-      <Form.Item name="answer" label="参考答案" rules={[{ required: true }]}>
-        <Input.TextArea rows={6} placeholder="参考答案（支持 Markdown）" />
+      <Form.Item name="answer" label="参考答案（Markdown）" rules={[{ required: true }]}>
+        <MarkdownEditor rows={7} placeholder="参考答案，支持 Markdown 和代码块" />
       </Form.Item>
 
       <Space style={{ width: '100%' }} size={16}>
@@ -70,23 +120,21 @@ export default function QuestionForm({ initial, onSuccess, onCancel }: Props) {
       <Form.Item label="标签" style={{ marginTop: 16 }}>
         <Form.List name="tags">
           {(fields, { add, remove }) => (
-            <>
-              <Space wrap>
-                {fields.map((field) => (
-                  <Space key={field.key} size={4}>
-                    <Form.Item {...field} noStyle rules={[{ required: true, message: '标签不能为空' }]}>
-                      <Input placeholder="标签" style={{ width: 100 }} />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(field.name)} style={{ color: '#ff4d4f' }} />
-                  </Space>
-                ))}
-                {fields.length < 10 && (
-                  <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />} size="small">
-                    添加标签
-                  </Button>
-                )}
-              </Space>
-            </>
+            <Space wrap>
+              {fields.map((field) => (
+                <Space key={field.key} size={4}>
+                  <Form.Item {...field} noStyle rules={[{ required: true, message: '标签不能为空' }]}>
+                    <Input placeholder="标签" style={{ width: 100 }} />
+                  </Form.Item>
+                  <MinusCircleOutlined onClick={() => remove(field.name)} style={{ color: '#ff4d4f' }} />
+                </Space>
+              ))}
+              {fields.length < 10 && (
+                <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />} size="small">
+                  添加标签
+                </Button>
+              )}
+            </Space>
           )}
         </Form.List>
       </Form.Item>

@@ -1,7 +1,8 @@
-import { Button, Descriptions, Space, Tag, Typography } from 'antd';
+import { Button, Descriptions, Space, Tag, Tabs, Typography } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import type { Question } from '../../api/questions';
+import MarkdownView from '../../components/MarkdownView';
 
 const diffColor: Record<string, string> = { easy: 'green', medium: 'orange', hard: 'red' };
 
@@ -10,11 +11,13 @@ interface Props { question: Question; onEdit: () => void; }
 export default function QuestionDetail({ question, onEdit }: Props) {
   return (
     <div>
-      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography.Title level={5} style={{ margin: 0 }}>{question.title}</Typography.Title>
+      {/* 标题 + 编辑按钮 */}
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+        <Typography.Title level={5} style={{ margin: 0, flex: 1 }}>{question.title}</Typography.Title>
         <Button icon={<EditOutlined />} onClick={onEdit}>编辑</Button>
       </div>
 
+      {/* 元数据 */}
       <Descriptions bordered column={2} size="small" style={{ marginBottom: 24 }}>
         <Descriptions.Item label="分类">
           <Tag>{question.category}</Tag>
@@ -35,15 +38,29 @@ export default function QuestionDetail({ question, onEdit }: Props) {
         <Descriptions.Item label="创建时间">{dayjs(question.createdAt).format('YYYY-MM-DD HH:mm')}</Descriptions.Item>
       </Descriptions>
 
-      <Typography.Title level={5}>题目内容</Typography.Title>
-      <div style={{ background: '#fafafa', padding: 16, borderRadius: 6, marginBottom: 24, whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
-        {question.content}
-      </div>
-
-      <Typography.Title level={5}>参考答案</Typography.Title>
-      <div style={{ background: '#f6ffed', padding: 16, borderRadius: 6, border: '1px solid #b7eb8f', whiteSpace: 'pre-wrap', lineHeight: 1.8 }}>
-        {question.answer}
-      </div>
+      {/* 内容 + 答案用 Tabs 切换，Markdown 渲染 */}
+      <Tabs
+        items={[
+          {
+            key: 'content',
+            label: '题目内容',
+            children: (
+              <div style={{ background: '#fafafa', borderRadius: 6, padding: '12px 16px', minHeight: 80 }}>
+                <MarkdownView>{question.content}</MarkdownView>
+              </div>
+            ),
+          },
+          {
+            key: 'answer',
+            label: '参考答案',
+            children: (
+              <div style={{ background: '#f6ffed', border: '1px solid #b7eb8f', borderRadius: 6, padding: '12px 16px', minHeight: 80 }}>
+                <MarkdownView>{question.answer}</MarkdownView>
+              </div>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }
