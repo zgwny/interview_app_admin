@@ -3,6 +3,6 @@ dist
 .env
 *.log
 .DS_Store
-.npmrc
+# .npmrc 需要保留（项目级配置指向公共 registry，Docker 构建需要它）
 .yarnrc
 .yarnrc.yml
