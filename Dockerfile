@@ -1,5 +1,5 @@
 # ── Stage 1: 编译 React 应用 ───────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
