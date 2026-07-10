@@ -19,9 +19,9 @@ import QuestionDetail from './QuestionDetail';
 
 const difficultyColor: Record<string, string> = { easy: 'green', medium: 'orange', hard: 'red' };
 const catColor: Record<string, string> = {
-  javascript: 'gold', typescript: 'blue', css: 'cyan', html: 'lime',
-  react: 'geekblue', vue: 'green', node: 'purple', network: 'magenta',
-  algorithm: 'volcano', other: 'default',
+  javascript: 'gold',    typescript: 'blue',    css: 'cyan',     html: 'lime',
+  react: 'geekblue',    vue: 'green',          node: 'purple',  network: 'magenta',
+  algorithm: 'volcano', sql: 'orange',         devops: 'cyan',  other: 'default',
 };
 
 export default function QuestionsPage() {

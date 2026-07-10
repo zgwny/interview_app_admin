@@ -1,6 +1,6 @@
 import client from './client';
 
-export const CATEGORIES = ['javascript','typescript','css','html','react','vue','node','network','algorithm','other'] as const;
+export const CATEGORIES = ['javascript','typescript','css','html','react','vue','node','network','algorithm','sql','devops','other'] as const;
 export const DIFFICULTIES = ['easy','medium','hard'] as const;
 export type Category = typeof CATEGORIES[number];
 export type Difficulty = typeof DIFFICULTIES[number];
