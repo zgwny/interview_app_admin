@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Select, Button, Space, Tabs, message } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { CATEGORIES, DIFFICULTIES, type Question } from '../../api/questions';
+import { DIFFICULTIES, type Question } from '../../api/questions';
 import { createQuestion, updateQuestion } from '../../api/questions';
+import { listCategories, type Category } from '../../api/categories';
 import MarkdownView from '../../components/MarkdownView';
 
 interface Props {
@@ -11,7 +12,6 @@ interface Props {
   onCancel: () => void;
 }
 
-const catOptions = CATEGORIES.map((c) => ({ label: c, value: c }));
 const diffOptions = DIFFICULTIES.map((d) => ({ label: d, value: d }));
 
 /** 带编辑 / 预览 tab 的 Markdown 输入框 */
@@ -65,8 +65,13 @@ function MarkdownEditor({
 
 export default function QuestionForm({ initial, onSuccess, onCancel }: Props) {
   const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading]       = React.useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const isEdit = !!initial;
+
+  useEffect(() => {
+    listCategories().then((res) => setCategories(res.data.categories)).catch(() => {});
+  }, []);
 
   React.useEffect(() => {
     if (initial) {
@@ -110,7 +115,11 @@ export default function QuestionForm({ initial, onSuccess, onCancel }: Props) {
 
       <Space style={{ width: '100%' }} size={16}>
         <Form.Item name="category" label="分类" rules={[{ required: true }]} style={{ flex: 1, marginBottom: 0 }}>
-          <Select options={catOptions} placeholder="选择分类" />
+          <Select
+            options={categories.map((c) => ({ label: c.label || c.name, value: c.name }))}
+            placeholder="选择分类"
+            showSearch
+          />
         </Form.Item>
         <Form.Item name="difficulty" label="难度" rules={[{ required: true }]} style={{ flex: 1, marginBottom: 0 }}>
           <Select options={diffOptions} placeholder="选择难度" />

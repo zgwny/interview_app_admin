@@ -6,6 +6,7 @@ import RequireAuth from './components/RequireAuth';
 import LoginPage from './pages/Login';
 import DashboardPage from './pages/Dashboard';
 import QuestionsPage from './pages/Questions';
+import CategoriesPage from './pages/Categories';
 import UsersPage from './pages/Users';
 
 export default function App() {
@@ -24,9 +25,10 @@ export default function App() {
               }
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard"  element={<DashboardPage />} />
-              <Route path="questions" element={<QuestionsPage />} />
-              <Route path="users"     element={<UsersPage />} />
+              <Route path="dashboard"   element={<DashboardPage />} />
+              <Route path="questions"  element={<QuestionsPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="users"      element={<UsersPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

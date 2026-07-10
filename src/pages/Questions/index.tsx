@@ -11,9 +11,10 @@ import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import {
   listQuestions, deleteQuestion,
-  CATEGORIES, DIFFICULTIES,
+  DIFFICULTIES,
   type Question, type QuestionListParams,
 } from '../../api/questions';
+import { listCategories, type Category } from '../../api/categories';
 import QuestionForm from './QuestionForm';
 import QuestionDetail from './QuestionDetail';
 
@@ -29,6 +30,12 @@ export default function QuestionsPage() {
   const [total, setTotal]     = useState(0);
   const [loading, setLoading] = useState(false);
   const [params, setParams]   = useState<QuestionListParams>({ page: 1, limit: 10 });
+
+  // 动态分类列表
+  const [categories, setCategories] = useState<Category[]>([]);
+  useEffect(() => {
+    listCategories().then((res) => setCategories(res.data.categories)).catch(() => {});
+  }, []);
 
   // 表单抽屉
   const [formOpen, setFormOpen]     = useState(false);
@@ -133,7 +140,7 @@ export default function QuestionsPage() {
           <Select
             placeholder="分类"
             allowClear style={{ width: 130 }}
-            options={CATEGORIES.map((c) => ({ label: c, value: c }))}
+            options={categories.map((c) => ({ label: c.label || c.name, value: c.name }))}
             onChange={(v) => setParams((p) => ({ ...p, category: v, page: 1 }))}
           />
           <Select

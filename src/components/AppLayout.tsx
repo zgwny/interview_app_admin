@@ -3,6 +3,7 @@ import { Layout, Menu, Avatar, Dropdown, theme, Typography } from 'antd';
 import {
   DashboardOutlined,
   QuestionCircleOutlined,
+  TagsOutlined,
   UserOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
@@ -14,9 +15,10 @@ import { useAuthStore } from '../store/authStore';
 const { Header, Sider, Content } = Layout;
 
 const menuItems = [
-  { key: '/dashboard', icon: <DashboardOutlined />,      label: '数据概览' },
-  { key: '/questions', icon: <QuestionCircleOutlined />, label: '题目管理' },
-  { key: '/users',     icon: <UserOutlined />,           label: '用户管理' },
+  { key: '/dashboard',   icon: <DashboardOutlined />,      label: '数据概览' },
+  { key: '/questions',   icon: <QuestionCircleOutlined />, label: '题目管理' },
+  { key: '/categories',  icon: <TagsOutlined />,           label: '分类管理' },
+  { key: '/users',       icon: <UserOutlined />,           label: '用户管理' },
 ];
 
 export default function AppLayout() {
