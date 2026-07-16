@@ -37,6 +37,9 @@ export default function QuestionsPage() {
     listCategories().then((res) => setCategories(res.data.categories)).catch(() => {});
   }, []);
 
+  // 从当前数据中提取所有标签（去重）
+  const tagOptions = Array.from(new Set(data.flatMap((q) => q.tags))).sort().map((t) => ({ label: t, value: t }));
+
   // 表单抽屉
   const [formOpen, setFormOpen]     = useState(false);
   const [editTarget, setEditTarget] = useState<Question | undefined>();
@@ -148,6 +151,14 @@ export default function QuestionsPage() {
             allowClear style={{ width: 100 }}
             options={DIFFICULTIES.map((d) => ({ label: d, value: d }))}
             onChange={(v) => setParams((p) => ({ ...p, difficulty: v, page: 1 }))}
+          />
+          <Select
+            placeholder="标签"
+            allowClear
+            showSearch
+            style={{ width: 130 }}
+            options={tagOptions}
+            onChange={(v) => setParams((p) => ({ ...p, tag: v, page: 1 }))}
           />
           <Button icon={<ReloadOutlined />} onClick={fetchData}>刷新</Button>
           <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>新建题目</Button>
