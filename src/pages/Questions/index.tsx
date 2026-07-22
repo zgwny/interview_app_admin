@@ -90,7 +90,7 @@ export default function QuestionsPage() {
       render: (v) => <Tag color={catColor[v] ?? 'default'}>{v}</Tag>,
     },
     {
-      title: '难度', dataIndex: 'difficulty', width: 80,
+      title: '难度', dataIndex: 'difficulty', width: 110,
       render: (v) => <Badge color={difficultyColor[v]} text={v} />,
     },
     {
